@@ -19,11 +19,11 @@ class UserProfileManager(BaseUserManager):
         
         return user
 
-    def create_super_user(self,email,name,password):
+    def create_superuser(self,email,name,password):
         """Creates a superuser. Email, name and passwords required"""
         user = self.create_user(email,name,password)
 
-        user.is_admin = True
+        user.is_staff = True
         user.is_superuser = True # property inherited from PermissionsMixin in our userprofile model
         user.save(using = self._db)
 
@@ -35,7 +35,7 @@ class UserProfile(AbstractBaseUser, PermissionsMixin): #his class inherits from 
     email = models.EmailField(max_length=255, unique=True) # creates an email field for the profile with max length 255 and each object's email will have to be unique
     name = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
     objects = UserProfileManager()
 
     USERNAME_FIELD = 'email' # required by default. we tell django that the USERNAME_FIELD it will use for authentication will be the email that the user gives
